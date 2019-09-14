@@ -1,0 +1,17 @@
+apply plugin: 'com.android.application'
+
+apply from :"../common.gradle"
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.shuisechanggong.qrcode.shell"
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    implementation project(":violet")
+}
