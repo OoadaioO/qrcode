@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 
 apply from: "../common.gradle"
 
+
 android {
 
     defaultConfig {
@@ -14,3 +15,4 @@ android {
 
 
 
+apply from: "publish.gradle"

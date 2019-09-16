@@ -1,0 +1,72 @@
+apply plugin: 'com.jfrog.bintray'
+apply from: 'publish/gradle-mavenizer.gradle'
+
+def String getLocalProperty(String key) {
+    Properties properties = new Properties()
+    rootProject.file("local.properties").withInputStream { properties.load(it) }
+    return properties.getProperty(key)
+}
+
+ext {
+
+    publish_repo = "com.shuisechanggong"
+    publish_project = "violet"
+    publish_vcsTag = "1.0.0"
+    publish_website="https://github.com/OoadaioO/qrcode"
+    publish_description = "shuisechanggong qrcode android lib"
+    publish_group_id = publish_repo
+    publish_version = android.defaultConfig.versionName
+    publish_package_desc = "$publish_project $publish_version"
+    publish_package = publish_project
+    publish_licenses = ['Apache-2.0']
+    publish_vcs_url = publish_website + '.git'
+    publish_user = getLocalProperty("bintrayUser")
+    publish_api_Key = getLocalProperty("bintrayApiKey")
+
+}
+
+version = publish_version
+group = publish_group_id
+
+
+project.ext{
+
+    mavDevelopers = ["bo":"bworkid"]
+    mavSiteUrl = publish_website
+    mavGitUrl = publish_vcs_url
+    mavProjectName = publish_project
+    mavPublishToInternalRepo = true
+    mavRepoInternalUrl = "${project.buildDir}/repo"
+    mavLibraryLicenses = ["Apache-2.0":'http://www.apache.org/licenses/LICENSE-2.0.txt']
+    mavLibraryDescription = "$publish_description"
+}
+
+
+
+bintray {
+    user = publish_user
+    key = publish_api_Key
+    configurations = ['archives']
+    pkg {
+        repo = publish_repo
+        name = publish_package
+        description = publish_description
+        licenses = publish_licenses
+        vcsUrl = publish_vcs_url
+        publish = true // 上传，并发布
+        publicDownloadNumbers = false
+        dryRun = false // true-本地执行，不上传，false-执行上传
+        version {
+            name = publish_version
+            desc = publish_package_desc
+            released = new Date()
+            vcsTag = publish_vcsTag
+        }
+    }
+
+    publications = ['mavenPublish'] // 本地maven配置
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
